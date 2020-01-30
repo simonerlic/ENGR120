@@ -73,7 +73,7 @@ task main()
 	while( time1(T1) < 5000) {
 
 		// Implements one iteration of control algorithm.
-		hit_target=set_motor( target_value );
+		set_motor( target_value );
 
 		// If we haven't hit target value yet...
 		if ( ! hit_target ) {
