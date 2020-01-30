@@ -118,7 +118,7 @@ task main()
 		do {
 
 			//We want to minimize the length of the search so let's divide the length in half.
-			mid_v = (result == 0) ? min_value : ((max_v + min_v) / 2);
+			mid_v = (max_v + min_v) / 2;
 
 			// Current measurement point set to best guess value.
 			current_meas_point = mid_v;
@@ -131,6 +131,7 @@ task main()
 			switch (result)
 			{
 			case 0:// we're done.
+				value = mid_v;
 				break;
 			case 1://Value is less than set point, so reset max_v to calculated midpoint - 1
 				max_v = mid_v - 1;
@@ -140,9 +141,6 @@ task main()
 				break;
 			case -1://Value is greater than set point, so reset min_v to calculated midpoint + 1
 				min_v = mid_v + 1;
-				// Our measurement point is too low,
-				// add 1 to current measurement point
-				current_meas_point = current_meas_point + 1;
 				break;
 			}
 
