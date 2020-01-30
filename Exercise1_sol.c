@@ -55,23 +55,17 @@ int resolve_measurement(int meas_point) {
 	total_meas++;
 
 	if (true_value > meas_point) {
-
 		// Return -1 if true value bigger than set point.
 		return(-1);
-
 	}
 	else if (true_value < meas_point) {
-
 		// Return 1 if true value less than set point
 		return(1);
-
 	}
 	else {
-
 		// Return 0 if measurement point matches
 		correct_guess++;
 		return(0);
-
 	}
 }
 
@@ -101,23 +95,19 @@ task main()
 
 		// Modify the code starting here.
 
-
-
 		// Initialization here.
+		// mid_v stores our best guess and is calculated based on calculated values for min and max. ie . (max_v + min_v) / 2
 		int mid_v = 0;
-
 
 		// Current measurement point set to lowest value.
 		int current_meas_point = min_v;
 
 		// Estimation code here.
 
-
-
 		// Start a loop
 		do {
-
-			//We want to minimize the length of the search so let's divide the length in half.
+			//We want to minimize the length of the search so let's divide the length in half to increase the probability of finding target.
+			// Everytime through the loop, mid_v is recalculated which narrows the range to converges on target.
 			mid_v = (max_v + min_v) / 2;
 
 			// Current measurement point set to best guess value.
@@ -135,8 +125,7 @@ task main()
 				break;
 			case 1://Value is less than set point, so reset max_v to calculated midpoint - 1
 				max_v = mid_v - 1;
-				// Measurement is not too low,
-				//  set estimated value to to current measurement point.
+				// Set estimated value to to current measurement point.
 				value = current_meas_point;
 				break;
 			case -1://Value is greater than set point, so reset min_v to calculated midpoint + 1
@@ -144,8 +133,7 @@ task main()
 				break;
 			}
 
-			// Loop until result == 0, indicating current measurement point is
-			//   the true value.
+			// Loop until result == 0, indicating current measurement point is the true value.
 		} while (result != 0);
 
 
