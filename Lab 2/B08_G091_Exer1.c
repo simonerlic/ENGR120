@@ -22,13 +22,11 @@ void monitorInput()
 {
 	if (SensorValue(button1) && !button1_pushed)
 	{
-		writeDebugStreamLine("button1_pushed=true");
 		button1_pushed = true;
 	}
 
 	if (SensorValue(button2) && !button2_pushed)
 	{
-		writeDebugStreamLine("button2_pushed=true");
 		button2_pushed = true;
 	}
 }
