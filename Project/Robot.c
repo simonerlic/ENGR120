@@ -100,6 +100,9 @@ void stop(){
 	motor[motor_right] = 0;
 }
 
+/*
+The at_target function determines if the vehicle is at the target location.
+*/
 bool at_target(){
 	writeDebugStreamLine("Checking if we are at target ...");
 	bool atTarget = (SensorValue(sonarSensor)<=threshold && is_grabbed());//Add infrared sensed value as well
@@ -107,12 +110,17 @@ bool at_target(){
 	return atTarget;
 }
 
-void do_finish(){
+/*
+The do_finish function accepts an integer value representing the speed of the motors as it reverses and turns away from the object
+Once moved away, it will then move to the edge of the arena and stop.
+*/
+void do_finish(int speed){
 	clearTimer(T1);
 	while(time1[T1]<1000){
-		move_reverse(slow);
-		turn_left(slow);
-	}//replace slow with the value required for a 90degree turn
+		move_reverse(speed);
+		turn_left(speed);//replace slow with the value required for a 90degree turn
+	}
+	stop();
 	if(SensorValue(sonarSensor)>100 || SensorValue(sonarSensor)<0){
 		move_forward(fast);//Move faster if further away.
 		}else{
@@ -121,9 +129,12 @@ void do_finish(){
 		}while(SensorValue(sonarSensor)>threshold);
 	}//move_forward until edge of ring
 	stop();
-	is_completed=false;//set so we don't endlessly loop
 }
 
+/*
+The do_scan function will use the vehicle's locomotory system to find the strongest infrared signal
+It will do this by turning to the right until it gets the strongest signal.
+*/
 int do_scan(){
 	//while(SensorValue(lightSensor) != 0){
 	//turn_right(20);
@@ -170,7 +181,7 @@ task main ()
 			STATE = STOPPED;
 			break;
 		case SCANNING:
-			if(do_scan() > 1){//Scan will detect the strongest infrared signal. Returns 1 when found.
+			if(do_scan() == 1){//Scan will detect the strongest infrared signal. Returns 1 when found.
 				STATE = FORWARD;//Move towards signal
 			}
 			break;
@@ -180,7 +191,9 @@ task main ()
 			STATE=STOPPED;
 			break;
 		case FINISH:
-			do_finish();
+			do_finish(slow);
+			is_completed=false;//set so we don't endlessly loop
+			STATE = STOPPED;
 			break;
 		}
 	}
