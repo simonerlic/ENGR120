@@ -136,9 +136,31 @@ The do_scan function will use the vehicle's locomotory system to find the strong
 It will do this by turning to the right until it gets the strongest signal.
 */
 int do_scan(){
-	//while(SensorValue(lightSensor) != 0){
-	//turn_right(20);
-	//}
+	bool scanning = true;
+	int loopControl = 0;
+	int lastMeasurement = 0;
+	int currentMeasurement = 0;
+	while(scanning && loopControl <= 18){//18 loops of 20deg rotation = 360 degrees so discontinue looping, we haven't optimized our search for strong signal.
+		//currentMeasurement = SensorValue(lightSensor);
+		if(currentMeasurement >= lastMeasurement){
+			lastMeasurement = currentMeasurement;
+			loopControl++;
+			clearTimer(T1);
+			while(time1[T1]<1000){//gotta figure out what 20deg rotation is
+				turn_right(20);
+			}
+			stop();
+			}else{
+			turn_left(20);
+			stop();
+			scanning=false;
+		}
+	}
+	if(loopControl >= 18 || scanning==true){
+		return 0;
+		}else{
+		return 1;
+	}
 }
 
 task main ()
@@ -183,6 +205,8 @@ task main ()
 		case SCANNING:
 			if(do_scan() == 1){//Scan will detect the strongest infrared signal. Returns 1 when found.
 				STATE = FORWARD;//Move towards signal
+				}else{
+				STATE=STOPPED;
 			}
 			break;
 		case RELEASE:
