@@ -202,7 +202,7 @@ Once the left sensor detects that it is less than or equal to the lowest calibra
 bool get_oriented(){
 	bool oriented = false;
 	while(!oriented){
-		//turn_left(slow);
+		turn_left(slow);
 		if(get_leftLightSensor() <= leftLow || get_rightLightSensor() <= rightLow){
 			oriented = true;
 		}
@@ -291,7 +291,6 @@ The high and low values are recorded form the left and right sensors
 */
 void do_calibrate(){
 	writeDebugStreamLine("Calibrating...");
-	//http://www.robotc.net/wikiarchive/Tutorials/Arduino_Projects/Mobile_Robotics/VEX/Program_to_use_Light_Sensor_to_find_light
 	// Auto-calibration ended by button press. The button will begin the main function.
 	while(!SensorValue(button1)) {
 		do_scanningStartLED();
